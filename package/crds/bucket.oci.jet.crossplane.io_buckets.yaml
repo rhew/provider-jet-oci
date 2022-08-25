@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: resources.null.template.jet.crossplane.io
+  name: buckets.bucket.oci.jet.crossplane.io
 spec:
-  group: null.template.jet.crossplane.io
+  group: bucket.oci.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
-    - templatejet
-    kind: Resource
-    listKind: ResourceList
-    plural: resources
-    singular: resource
+    - ocijet
+    kind: Bucket
+    listKind: BucketList
+    plural: buckets
+    singular: bucket
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Resource is the Schema for the Resources API
+        description: Bucket is the Schema for the Buckets API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ResourceSpec defines the desired state of Resource
+            description: BucketSpec defines the desired state of Bucket
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,13 +63,60 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  triggers:
+                  accessType:
+                    type: string
+                  autoTiering:
+                    type: string
+                  compartmentId:
+                    type: string
+                  definedTags:
                     additionalProperties:
                       type: string
-                    description: A map of arbitrary strings that, when changed, will
-                      force the null resource to be replaced, re-running any associated
-                      provisioners.
                     type: object
+                  freeformTags:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  kmsKeyId:
+                    type: string
+                  metadata:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  namespace:
+                    type: string
+                  objectEventsEnabled:
+                    type: boolean
+                  retentionRules:
+                    items:
+                      properties:
+                        displayName:
+                          type: string
+                        duration:
+                          items:
+                            properties:
+                              timeAmount:
+                                type: string
+                              timeUnit:
+                                type: string
+                            required:
+                            - timeAmount
+                            - timeUnit
+                            type: object
+                          type: array
+                        timeRuleLocked:
+                          type: string
+                      required:
+                      - displayName
+                      type: object
+                    type: array
+                  storageTier:
+                    type: string
+                  versioning:
+                    type: string
+                required:
+                - compartmentId
+                - namespace
                 type: object
               providerConfigRef:
                 default:
@@ -168,11 +215,29 @@ spec:
             - forProvider
             type: object
           status:
-            description: ResourceStatus defines the observed state of Resource.
+            description: BucketStatus defines the observed state of Bucket.
             properties:
               atProvider:
                 properties:
+                  approximateCount:
+                    type: string
+                  approximateSize:
+                    type: string
+                  bucketId:
+                    type: string
+                  createdBy:
+                    type: string
+                  etag:
+                    type: string
                   id:
+                    type: string
+                  isReadOnly:
+                    type: boolean
+                  objectLifecyclePolicyEtag:
+                    type: string
+                  replicationEnabled:
+                    type: boolean
+                  timeCreated:
                     type: string
                 type: object
               conditions:

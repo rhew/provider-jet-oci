@@ -27,7 +27,7 @@ import (
 
 	"github.com/crossplane/terrajet/pkg/terraform"
 
-	"github.com/crossplane-contrib/provider-jet-template/apis/v1alpha1"
+	"github.com/crossplane-contrib/provider-jet-oci/apis/v1alpha1"
 )
 
 const (
@@ -36,7 +36,16 @@ const (
 	errGetProviderConfig    = "cannot get referenced ProviderConfig"
 	errTrackUsage           = "cannot track ProviderConfig usage"
 	errExtractCredentials   = "cannot extract credentials"
-	errUnmarshalCredentials = "cannot unmarshal template credentials as JSON"
+	errUnmarshalCredentials = "cannot unmarshal oci credentials as JSON"
+	keyTenancy_ocid = "tenancy_ocid"
+	keyUser_ocid = "user_ocid"
+	keyPrivate_key = "private_key"
+	keyPrivate_key_path = "private_key_path"
+	keyPrivate_key_password = "private_key_password"
+	keyFingerprint = "fingerprint"
+	keyRegion = "region"
+	keyConfig_file_profile = "config_file_profile"
+	
 )
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
@@ -69,8 +78,8 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		if err != nil {
 			return ps, errors.Wrap(err, errExtractCredentials)
 		}
-		templateCreds := map[string]string{}
-		if err := json.Unmarshal(data, &templateCreds); err != nil {
+		ociCreds := map[string]string{}
+		if err := json.Unmarshal(data, &ociCreds); err != nil {
 			return ps, errors.Wrap(err, errUnmarshalCredentials)
 		}
 
@@ -79,14 +88,17 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		// credentials via the environment variables. You should specify
 		// credentials via the Terraform main.tf.json instead.
 		/*ps.Env = []string{
-			fmt.Sprintf("%s=%s", "HASHICUPS_USERNAME", templateCreds["username"]),
-			fmt.Sprintf("%s=%s", "HASHICUPS_PASSWORD", templateCreds["password"]),
+			fmt.Sprintf("%s=%s", "HASHICUPS_USERNAME", ociCreds["username"]),
+			fmt.Sprintf("%s=%s", "HASHICUPS_PASSWORD", ociCreds["password"]),
 		}*/
 		// set credentials in Terraform provider configuration
-		/*ps.Configuration = map[string]interface{}{
-			"username": templateCreds["username"],
-			"password": templateCreds["password"],
-		}*/
+		ps.Configuration = map[string]interface{}{
+			"tenancy_ocid": ociCreds["tenancy_ocid"],
+			"user_ocid": ociCreds["user_ocid"],
+			"private_key_path": ociCreds["private_key_path"],
+			"fingerprint": ociCreds["fingerprint"],
+			"region": ociCreds["region"],
+		}
 		return ps, nil
 	}
 }

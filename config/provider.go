@@ -23,12 +23,13 @@ import (
 	tjconfig "github.com/crossplane/terrajet/pkg/config"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/crossplane-contrib/provider-jet-template/config/null"
+	"github.com/crossplane-contrib/provider-jet-oci/config/bucket"
+	"github.com/crossplane-contrib/provider-jet-oci/config/object"
 )
 
 const (
-	resourcePrefix = "template"
-	modulePath     = "github.com/crossplane-contrib/provider-jet-template"
+	resourcePrefix = "oci"
+	modulePath     = "github.com/crossplane-contrib/provider-jet-oci"
 )
 
 //go:embed schema.json
@@ -44,11 +45,16 @@ func GetProvider() *tjconfig.Provider {
 	}
 
 	pc := tjconfig.NewProviderWithSchema([]byte(providerSchema), resourcePrefix, modulePath,
-		tjconfig.WithDefaultResourceFn(defaultResourceFn))
+		tjconfig.WithDefaultResourceFn(defaultResourceFn),
+		tjconfig.WithIncludeList([]string{
+			"oci_objectstorage_bucket$",
+			"oci_objectstorage_object$",
+		}))
 
 	for _, configure := range []func(provider *tjconfig.Provider){
 		// add custom config functions
-		null.Configure,
+		bucket.Configure,
+		object.Configure,
 	} {
 		configure(pc)
 	}

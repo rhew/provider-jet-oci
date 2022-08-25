@@ -1,0 +1,8 @@
+apiVersion: bucket.oci.jet.crossplane.io/v1alpha1
+kind: Bucket
+metadata:
+  name: hello-crossplane
+spec:
+  forProvider:
+    compartmentId: "ocid1.tenancy.oc1..aaaaaaaamftp3cj4ly22ujveq6ikedl2hgbsliby7huvavu6633bmtmbi3ha"
+    namespace: "id8pypxcqtqs"
