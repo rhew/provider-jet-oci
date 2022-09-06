@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: buckets.bucket.oci.jet.crossplane.io
+  name: subnets.core.oci.jet.crossplane.io
 spec:
-  group: bucket.oci.jet.crossplane.io
+  group: core.oci.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - ocijet
-    kind: Bucket
-    listKind: BucketList
-    plural: buckets
-    singular: bucket
+    kind: Subnet
+    listKind: SubnetList
+    plural: subnets
+    singular: subnet
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Bucket is the Schema for the Buckets API
+        description: Subnet is the Schema for the Subnets API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: BucketSpec defines the desired state of Bucket
+            description: SubnetSpec defines the desired state of Subnet
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,9 +63,9 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  accessType:
+                  availabilityDomain:
                     type: string
-                  autoTiering:
+                  cidrBlock:
                     type: string
                   compartmentId:
                     type: string
@@ -96,49 +96,59 @@ spec:
                     additionalProperties:
                       type: string
                     type: object
+                  dhcpOptionsId:
+                    type: string
+                  displayName:
+                    type: string
+                  dnsLabel:
+                    type: string
                   freeformTags:
                     additionalProperties:
                       type: string
                     type: object
-                  kmsKeyId:
+                  ipv6cidrBlock:
                     type: string
-                  metadata:
-                    additionalProperties:
-                      type: string
-                    type: object
-                  namespace:
-                    type: string
-                  objectEventsEnabled:
-                    type: boolean
-                  retentionRules:
+                  ipv6cidrBlocks:
                     items:
-                      properties:
-                        displayName:
-                          type: string
-                        duration:
-                          items:
-                            properties:
-                              timeAmount:
-                                type: string
-                              timeUnit:
-                                type: string
-                            required:
-                            - timeAmount
-                            - timeUnit
-                            type: object
-                          type: array
-                        timeRuleLocked:
-                          type: string
-                      required:
-                      - displayName
-                      type: object
+                      type: string
                     type: array
-                  storageTier:
+                  prohibitInternetIngress:
+                    type: boolean
+                  prohibitPublicIpOnVnic:
+                    type: boolean
+                  routeTableId:
                     type: string
-                  versioning:
+                  securityListIds:
+                    items:
+                      type: string
+                    type: array
+                  vcnId:
                     type: string
+                  vcnIdRef:
+                    description: A Reference to a named object.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  vcnIdSelector:
+                    description: A Selector selects an object.
+                    properties:
+                      matchControllerRef:
+                        description: MatchControllerRef ensures an object with the
+                          same controller reference as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                    type: object
                 required:
-                - namespace
+                - cidrBlock
                 type: object
               providerConfigRef:
                 default:
@@ -237,29 +247,23 @@ spec:
             - forProvider
             type: object
           status:
-            description: BucketStatus defines the observed state of Bucket.
+            description: SubnetStatus defines the observed state of Subnet.
             properties:
               atProvider:
                 properties:
-                  approximateCount:
-                    type: string
-                  approximateSize:
-                    type: string
-                  bucketId:
-                    type: string
-                  createdBy:
-                    type: string
-                  etag:
-                    type: string
                   id:
                     type: string
-                  isReadOnly:
-                    type: boolean
-                  objectLifecyclePolicyEtag:
+                  ipv6virtualRouterIp:
                     type: string
-                  replicationEnabled:
-                    type: boolean
+                  state:
+                    type: string
+                  subnetDomainName:
+                    type: string
                   timeCreated:
+                    type: string
+                  virtualRouterIp:
+                    type: string
+                  virtualRouterMac:
                     type: string
                 type: object
               conditions:

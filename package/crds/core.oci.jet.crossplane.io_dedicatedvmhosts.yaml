@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: objects.object.oci.jet.crossplane.io
+  name: dedicatedvmhosts.core.oci.jet.crossplane.io
 spec:
-  group: object.oci.jet.crossplane.io
+  group: core.oci.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - ocijet
-    kind: Object
-    listKind: ObjectList
-    plural: objects
-    singular: object
+    kind: DedicatedVMHost
+    listKind: DedicatedVMHostList
+    plural: dedicatedvmhosts
+    singular: dedicatedvmhost
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Object is the Schema for the Objects API
+        description: DedicatedVMHost is the Schema for the DedicatedVMHosts API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ObjectSpec defines the desired state of Object
+            description: DedicatedVMHostSpec defines the desired state of DedicatedVMHost
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,68 +63,28 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  bucket:
+                  availabilityDomain:
                     type: string
-                  cacheControl:
+                  compartmentId:
                     type: string
-                  content:
+                  dedicatedVmHostShape:
                     type: string
-                  contentDisposition:
-                    type: string
-                  contentEncoding:
-                    type: string
-                  contentLanguage:
-                    type: string
-                  contentMd5:
-                    type: string
-                  contentType:
-                    type: string
-                  deleteAllObjectVersions:
-                    type: boolean
-                  metadata:
+                  definedTags:
                     additionalProperties:
                       type: string
                     type: object
-                  namespace:
+                  displayName:
                     type: string
-                  object:
+                  faultDomain:
                     type: string
-                  opcSseKmsKeyId:
-                    type: string
-                  source:
-                    type: string
-                  sourceUriDetails:
-                    items:
-                      properties:
-                        bucket:
-                          type: string
-                        destinationObjectIfMatchEtag:
-                          type: string
-                        destinationObjectIfNoneMatchEtag:
-                          type: string
-                        namespace:
-                          type: string
-                        object:
-                          type: string
-                        region:
-                          type: string
-                        sourceObjectIfMatchEtag:
-                          type: string
-                        sourceVersionId:
-                          type: string
-                      required:
-                      - bucket
-                      - namespace
-                      - object
-                      - region
-                      type: object
-                    type: array
-                  storageTier:
-                    type: string
+                  freeformTags:
+                    additionalProperties:
+                      type: string
+                    type: object
                 required:
-                - bucket
-                - namespace
-                - object
+                - availabilityDomain
+                - compartmentId
+                - dedicatedVmHostShape
                 type: object
               providerConfigRef:
                 default:
@@ -223,20 +183,24 @@ spec:
             - forProvider
             type: object
           status:
-            description: ObjectStatus defines the observed state of Object.
+            description: DedicatedVMHostStatus defines the observed state of DedicatedVMHost.
             properties:
               atProvider:
                 properties:
-                  contentLength:
-                    type: string
                   id:
                     type: string
+                  remainingMemoryInGbs:
+                    type: number
+                  remainingOcpus:
+                    type: number
                   state:
                     type: string
-                  versionId:
+                  timeCreated:
                     type: string
-                  workRequestId:
-                    type: string
+                  totalMemoryInGbs:
+                    type: number
+                  totalOcpus:
+                    type: number
                 type: object
               conditions:
                 description: Conditions of the resource.

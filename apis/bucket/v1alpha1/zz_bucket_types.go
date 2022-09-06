@@ -55,8 +55,15 @@ type BucketParameters struct {
 	// +kubebuilder:validation:Optional
 	AutoTiering *string `json:"autoTiering,omitempty" tf:"auto_tiering,omitempty"`
 
-	// +kubebuilder:validation:Required
-	CompartmentID *string `json:"compartmentId" tf:"compartment_id,omitempty"`
+	// +crossplane:generate:reference:type=github.com/crossplane-contrib/provider-jet-oci/apis/identity/v1alpha1.Compartment
+	// +kubebuilder:validation:Optional
+	CompartmentID *string `json:"compartmentId,omitempty" tf:"compartment_id,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	CompartmentIDRef *v1.Reference `json:"compartmentIdRef,omitempty" tf:"-"`
+
+	// +kubebuilder:validation:Optional
+	CompartmentIDSelector *v1.Selector `json:"compartmentIdSelector,omitempty" tf:"-"`
 
 	// +kubebuilder:validation:Optional
 	DefinedTags map[string]*string `json:"definedTags,omitempty" tf:"defined_tags,omitempty"`

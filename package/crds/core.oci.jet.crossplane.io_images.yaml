@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: buckets.bucket.oci.jet.crossplane.io
+  name: images.core.oci.jet.crossplane.io
 spec:
-  group: bucket.oci.jet.crossplane.io
+  group: core.oci.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - ocijet
-    kind: Bucket
-    listKind: BucketList
-    plural: buckets
-    singular: bucket
+    kind: Image
+    listKind: ImageList
+    plural: images
+    singular: image
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Bucket is the Schema for the Buckets API
+        description: Image is the Schema for the Images API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: BucketSpec defines the desired state of Bucket
+            description: ImageSpec defines the desired state of Image
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,82 +63,47 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  accessType:
-                    type: string
-                  autoTiering:
-                    type: string
                   compartmentId:
                     type: string
-                  compartmentIdRef:
-                    description: A Reference to a named object.
-                    properties:
-                      name:
-                        description: Name of the referenced object.
-                        type: string
-                    required:
-                    - name
-                    type: object
-                  compartmentIdSelector:
-                    description: A Selector selects an object.
-                    properties:
-                      matchControllerRef:
-                        description: MatchControllerRef ensures an object with the
-                          same controller reference as the selecting object is selected.
-                        type: boolean
-                      matchLabels:
-                        additionalProperties:
-                          type: string
-                        description: MatchLabels ensures an object with matching labels
-                          is selected.
-                        type: object
-                    type: object
                   definedTags:
                     additionalProperties:
                       type: string
                     type: object
+                  displayName:
+                    type: string
                   freeformTags:
                     additionalProperties:
                       type: string
                     type: object
-                  kmsKeyId:
-                    type: string
-                  metadata:
-                    additionalProperties:
-                      type: string
-                    type: object
-                  namespace:
-                    type: string
-                  objectEventsEnabled:
-                    type: boolean
-                  retentionRules:
+                  imageSourceDetails:
                     items:
                       properties:
-                        displayName:
+                        bucketName:
                           type: string
-                        duration:
-                          items:
-                            properties:
-                              timeAmount:
-                                type: string
-                              timeUnit:
-                                type: string
-                            required:
-                            - timeAmount
-                            - timeUnit
-                            type: object
-                          type: array
-                        timeRuleLocked:
+                        namespaceName:
+                          type: string
+                        objectName:
+                          type: string
+                        operatingSystem:
+                          type: string
+                        operatingSystemVersion:
+                          type: string
+                        sourceImageType:
+                          type: string
+                        sourceType:
+                          type: string
+                        sourceUri:
                           type: string
                       required:
-                      - displayName
+                      - sourceType
                       type: object
                     type: array
-                  storageTier:
+                  instanceId:
                     type: string
-                  versioning:
+                  launchMode:
                     type: string
                 required:
-                - namespace
+                - compartmentId
                 type: object
               providerConfigRef:
                 default:
@@ -237,28 +202,54 @@ spec:
             - forProvider
             type: object
           status:
-            description: BucketStatus defines the observed state of Bucket.
+            description: ImageStatus defines the observed state of Image.
             properties:
               atProvider:
                 properties:
-                  approximateCount:
+                  agentFeatures:
+                    items:
+                      properties:
+                        isManagementSupported:
+                          type: boolean
+                        isMonitoringSupported:
+                          type: boolean
+                      type: object
+                    type: array
+                  baseImageId:
                     type: string
-                  approximateSize:
+                  billableSizeInGbs:
                     type: string
-                  bucketId:
-                    type: string
-                  createdBy:
-                    type: string
-                  etag:
-                    type: string
+                  createImageAllowed:
+                    type: boolean
                   id:
                     type: string
-                  isReadOnly:
-                    type: boolean
-                  objectLifecyclePolicyEtag:
+                  launchOptions:
+                    items:
+                      properties:
+                        bootVolumeType:
+                          type: string
+                        firmware:
+                          type: string
+                        isConsistentVolumeNamingEnabled:
+                          type: boolean
+                        isPvEncryptionInTransitEnabled:
+                          type: boolean
+                        networkType:
+                          type: string
+                        remoteDataVolumeType:
+                          type: string
+                      type: object
+                    type: array
+                  listingType:
                     type: string
-                  replicationEnabled:
-                    type: boolean
+                  operatingSystem:
+                    type: string
+                  operatingSystemVersion:
+                    type: string
+                  sizeInMbs:
+                    type: string
+                  state:
+                    type: string
                   timeCreated:
                     type: string
                 type: object

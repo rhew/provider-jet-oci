@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: buckets.bucket.oci.jet.crossplane.io
+  name: vcns.core.oci.jet.crossplane.io
 spec:
-  group: bucket.oci.jet.crossplane.io
+  group: core.oci.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - ocijet
-    kind: Bucket
-    listKind: BucketList
-    plural: buckets
-    singular: bucket
+    kind: Vcn
+    listKind: VcnList
+    plural: vcns
+    singular: vcn
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Bucket is the Schema for the Buckets API
+        description: Vcn is the Schema for the Vcns API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: BucketSpec defines the desired state of Bucket
+            description: VcnSpec defines the desired state of Vcn
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,10 +63,24 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  accessType:
+                  byoipv6cidrDetails:
+                    items:
+                      properties:
+                        byoipv6rangeId:
+                          type: string
+                        ipv6cidrBlock:
+                          type: string
+                      required:
+                      - byoipv6rangeId
+                      - ipv6cidrBlock
+                      type: object
+                    type: array
+                  cidrBlock:
                     type: string
-                  autoTiering:
-                    type: string
+                  cidrBlocks:
+                    items:
+                      type: string
+                    type: array
                   compartmentId:
                     type: string
                   compartmentIdRef:
@@ -96,49 +110,22 @@ spec:
                     additionalProperties:
                       type: string
                     type: object
+                  displayName:
+                    type: string
+                  dnsLabel:
+                    type: string
                   freeformTags:
                     additionalProperties:
                       type: string
                     type: object
-                  kmsKeyId:
-                    type: string
-                  metadata:
-                    additionalProperties:
-                      type: string
-                    type: object
-                  namespace:
-                    type: string
-                  objectEventsEnabled:
-                    type: boolean
-                  retentionRules:
+                  ipv6privateCidrBlocks:
                     items:
-                      properties:
-                        displayName:
-                          type: string
-                        duration:
-                          items:
-                            properties:
-                              timeAmount:
-                                type: string
-                              timeUnit:
-                                type: string
-                            required:
-                            - timeAmount
-                            - timeUnit
-                            type: object
-                          type: array
-                        timeRuleLocked:
-                          type: string
-                      required:
-                      - displayName
-                      type: object
+                      type: string
                     type: array
-                  storageTier:
-                    type: string
-                  versioning:
-                    type: string
-                required:
-                - namespace
+                  isIpv6Enabled:
+                    type: boolean
+                  isOracleGuaAllocationEnabled:
+                    type: boolean
                 type: object
               providerConfigRef:
                 default:
@@ -237,29 +224,31 @@ spec:
             - forProvider
             type: object
           status:
-            description: BucketStatus defines the observed state of Bucket.
+            description: VcnStatus defines the observed state of Vcn.
             properties:
               atProvider:
                 properties:
-                  approximateCount:
+                  byoipv6cidrBlocks:
+                    items:
+                      type: string
+                    type: array
+                  defaultDhcpOptionsId:
                     type: string
-                  approximateSize:
+                  defaultRouteTableId:
                     type: string
-                  bucketId:
-                    type: string
-                  createdBy:
-                    type: string
-                  etag:
+                  defaultSecurityListId:
                     type: string
                   id:
                     type: string
-                  isReadOnly:
-                    type: boolean
-                  objectLifecyclePolicyEtag:
+                  ipv6cidrBlocks:
+                    items:
+                      type: string
+                    type: array
+                  state:
                     type: string
-                  replicationEnabled:
-                    type: boolean
                   timeCreated:
+                    type: string
+                  vcnDomainName:
                     type: string
                 type: object
               conditions:

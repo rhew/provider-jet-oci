@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: buckets.bucket.oci.jet.crossplane.io
+  name: vlans.core.oci.jet.crossplane.io
 spec:
-  group: bucket.oci.jet.crossplane.io
+  group: core.oci.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - ocijet
-    kind: Bucket
-    listKind: BucketList
-    plural: buckets
-    singular: bucket
+    kind: Vlan
+    listKind: VlanList
+    plural: vlans
+    singular: vlan
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Bucket is the Schema for the Buckets API
+        description: Vlan is the Schema for the Vlans API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: BucketSpec defines the desired state of Bucket
+            description: VlanSpec defines the desired state of Vlan
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,82 +63,36 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  accessType:
+                  availabilityDomain:
                     type: string
-                  autoTiering:
+                  cidrBlock:
                     type: string
                   compartmentId:
                     type: string
-                  compartmentIdRef:
-                    description: A Reference to a named object.
-                    properties:
-                      name:
-                        description: Name of the referenced object.
-                        type: string
-                    required:
-                    - name
-                    type: object
-                  compartmentIdSelector:
-                    description: A Selector selects an object.
-                    properties:
-                      matchControllerRef:
-                        description: MatchControllerRef ensures an object with the
-                          same controller reference as the selecting object is selected.
-                        type: boolean
-                      matchLabels:
-                        additionalProperties:
-                          type: string
-                        description: MatchLabels ensures an object with matching labels
-                          is selected.
-                        type: object
-                    type: object
                   definedTags:
                     additionalProperties:
                       type: string
                     type: object
+                  displayName:
+                    type: string
                   freeformTags:
                     additionalProperties:
                       type: string
                     type: object
-                  kmsKeyId:
-                    type: string
-                  metadata:
-                    additionalProperties:
-                      type: string
-                    type: object
-                  namespace:
-                    type: string
-                  objectEventsEnabled:
-                    type: boolean
-                  retentionRules:
+                  nsgIds:
                     items:
-                      properties:
-                        displayName:
-                          type: string
-                        duration:
-                          items:
-                            properties:
-                              timeAmount:
-                                type: string
-                              timeUnit:
-                                type: string
-                            required:
-                            - timeAmount
-                            - timeUnit
-                            type: object
-                          type: array
-                        timeRuleLocked:
-                          type: string
-                      required:
-                      - displayName
-                      type: object
+                      type: string
                     type: array
-                  storageTier:
+                  routeTableId:
                     type: string
-                  versioning:
+                  vcnId:
                     type: string
+                  vlanTag:
+                    type: number
                 required:
-                - namespace
+                - cidrBlock
+                - compartmentId
+                - vcnId
                 type: object
               providerConfigRef:
                 default:
@@ -237,28 +191,14 @@ spec:
             - forProvider
             type: object
           status:
-            description: BucketStatus defines the observed state of Bucket.
+            description: VlanStatus defines the observed state of Vlan.
             properties:
               atProvider:
                 properties:
-                  approximateCount:
-                    type: string
-                  approximateSize:
-                    type: string
-                  bucketId:
-                    type: string
-                  createdBy:
-                    type: string
-                  etag:
-                    type: string
                   id:
                     type: string
-                  isReadOnly:
-                    type: boolean
-                  objectLifecyclePolicyEtag:
+                  state:
                     type: string
-                  replicationEnabled:
-                    type: boolean
                   timeCreated:
                     type: string
                 type: object

@@ -22,7 +22,13 @@ import (
 	"github.com/crossplane/terrajet/pkg/controller"
 
 	bucket "github.com/crossplane-contrib/provider-jet-oci/internal/controller/bucket/bucket"
-	object "github.com/crossplane-contrib/provider-jet-oci/internal/controller/object/object"
+	dedicatedvmhost "github.com/crossplane-contrib/provider-jet-oci/internal/controller/core/dedicatedvmhost"
+	image "github.com/crossplane-contrib/provider-jet-oci/internal/controller/core/image"
+	instance "github.com/crossplane-contrib/provider-jet-oci/internal/controller/core/instance"
+	subnet "github.com/crossplane-contrib/provider-jet-oci/internal/controller/core/subnet"
+	vcn "github.com/crossplane-contrib/provider-jet-oci/internal/controller/core/vcn"
+	vlan "github.com/crossplane-contrib/provider-jet-oci/internal/controller/core/vlan"
+	compartment "github.com/crossplane-contrib/provider-jet-oci/internal/controller/identity/compartment"
 	providerconfig "github.com/crossplane-contrib/provider-jet-oci/internal/controller/providerconfig"
 )
 
@@ -31,7 +37,13 @@ import (
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		bucket.Setup,
-		object.Setup,
+		dedicatedvmhost.Setup,
+		image.Setup,
+		instance.Setup,
+		subnet.Setup,
+		vcn.Setup,
+		vlan.Setup,
+		compartment.Setup,
 		providerconfig.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {

@@ -24,7 +24,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"github.com/crossplane-contrib/provider-jet-oci/config/bucket"
-	"github.com/crossplane-contrib/provider-jet-oci/config/object"
+	"github.com/crossplane-contrib/provider-jet-oci/config/identity"
+	"github.com/crossplane-contrib/provider-jet-oci/config/core"
+
 )
 
 const (
@@ -48,13 +50,20 @@ func GetProvider() *tjconfig.Provider {
 		tjconfig.WithDefaultResourceFn(defaultResourceFn),
 		tjconfig.WithIncludeList([]string{
 			"oci_objectstorage_bucket$",
-			"oci_objectstorage_object$",
+			"oci_identity_compartment$",
+			"oci_core_instance$",
+			"oci_core_image$",
+			"oci_core_vcn$",
+			"oci_core_subnet$",
+			"oci_core_dedicated_vm_host$",
+			"oci_core_vlan$",
 		}))
 
 	for _, configure := range []func(provider *tjconfig.Provider){
 		// add custom config functions
 		bucket.Configure,
-		object.Configure,
+		identity.Configure,
+		core.Configure,
 	} {
 		configure(pc)
 	}
